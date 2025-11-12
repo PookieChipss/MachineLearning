@@ -1,4 +1,4 @@
-﻿# MachineLearning — Regression & Classification on Tabular Data
+# MachineLearning — Regression & Classification on Tabular Data
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-orange)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-yellow)
@@ -23,14 +23,12 @@ MachineLearning/
 
 yaml
 Copy code
-
-> If datasets aren’t in the repo, add the URLs below and place the CSVs beside each notebook before running.
+> If datasets aren’t in the repo, use the URLs below and place the CSVs beside each notebook before running.
 
 ---
 
 ## ⚙️ Environment
-
-`ash
+```bash
 # (optional) create & activate a virtual env
 python -m venv .venv
 # Windows:
@@ -41,73 +39,61 @@ python -m venv .venv
 # install essentials
 pip install -U pip
 pip install numpy pandas scikit-learn imbalanced-learn matplotlib seaborn jupyter
+
 # for the Keras MLP in Task 2 (CPU TF is fine)
 pip install tensorflow
-Launch notebooks:
+```
 
-bash
-Copy code
-jupyter lab   # or: jupyter notebook
-🚀 Quickstart
-Open Task 1/regression.ipynb or Task 2/classification.ipynb.
+## 🚀 Quickstart
+1. Open **Task 1/regression.ipynb** or **Task 2/classification.ipynb**.
+2. Run cells top to bottom (ensure the dataset CSVs are next to each notebook).
+3. Review printed metrics and generated plots/curves.
 
-Run cells top→bottom (add dataset CSVs next to the notebooks if needed).
+## 📘 Notebook Details
 
-Review printed metrics and generated plots/curves.
+### Task 1 — Regression (House Prices)
+**Preprocessing:** `ColumnTransformer`  
+- Numeric → median impute (+ scale where needed)  
+- Categorical → most-frequent impute + one-hot
 
-📘 Notebook Details
-Task 1 — Regression (House Prices)
-Preprocessing: ColumnTransformer
+**Target:** train on `log(price)`; back-transform predictions for reporting.  
+**Models:** `RandomForestRegressor` (tuned) and `MLPRegressor`.  
+**Evaluation:** MAE, RMSE, R² with residual checks and RF feature-importance bars.  
+**Outcome:** RF is a strong tabular baseline; log-target stabilises error.
 
-Numeric → median impute (+scale where needed)
+### Task 2 — Classification (Telco Churn)
+**Split:** stratified Train/Val/Test with the same preprocessing logic.  
 
-Categorical → most-frequent impute + one-hot
+**Imbalance handling:**  
+- RF path → `ImbPipeline(preprocess → SMOTENC → RandomForest)`  
+- MLP path → dense one-hot features with **class weights** + **EarlyStopping**
 
-Target: train on log(price); back-transform predictions for reporting.
+**Tuning:**  
+- RF → `RandomizedSearchCV` (StratifiedKFold, F1 scoring)  
+- MLP → small grid over width/dropout; early stopping on validation loss
 
-Models: RandomForestRegressor (tuned) and MLPRegressor.
+**Evaluation:** Accuracy, Precision, Recall, F1, ROC-AUC, PR-AUC, Confusion Matrix, ROC and PR curves.  
 
-Evaluation: MAE, RMSE, R² with residual checks and RF feature-importance bars.
+**Headline (report):** tuned RF + SMOTENC ≈ Accuracy ~0.77, Precision 0.55, Recall 0.68, F1 0.61, ROC-AUC 0.84, PR-AUC 0.64.  
+MLP often yields higher recall on churners; RF remains more balanced overall.
 
-Outcome: RF is the stronger tabular baseline; log-target stabilises error.
+## 🧩 Key Ideas
+- Use pipelines to prevent leakage (fit on Train; apply to Val/Test).
+- Apply SMOTENC on the training split only; use class weights for the MLP.
+- Tune with validation folds and fixed seeds (`random_state=42`).
+- Use RF feature importances for quick explainability.
 
-Task 2 — Classification (Telco Churn)
-Split: stratified Train/Val/Test with robust preprocessing.
+## 📊 Figures (auto-generated)
+- Regression: Actual vs Predicted, Residual/Error plots, RF feature importances.  
+- Classification: Confusion Matrix, ROC & PR curves, RF feature importances.
 
-Imbalance:
-
-RF path → ImbPipeline(preprocess → SMOTENC → RandomForest)
-
-MLP path → dense one-hot features with class weights + EarlyStopping
-
-Tuning: RandomizedSearchCV (StratifiedKFold, F1 scoring) for RF; sensible width/dropout grid for MLP.
-
-Evaluation: Accuracy, Precision, Recall, F1, ROC-AUC, PR-AUC, Confusion Matrix, ROC & PR curves.
-
-Headline (report): tuned RF+SMOTENC ≈ Accuracy ~0.77, Precision 0.55, Recall 0.68, F1 0.61, ROC-AUC 0.84, PR-AUC 0.64.
-MLP tends to higher recall on churners; RF remains slightly more balanced overall.
-
-🧩 Key Ideas
-Pipelines prevent leakage (fit on Train; apply to Val/Test).
-
-Imbalance handled correctly (SMOTENC on Train only; class weights for MLP).
-
-Validation-driven tuning with fixed seeds (random_state=42).
-
-Quick explainability via RF feature importances.
-
-📊 Figures (auto-generated)
-Regression: Actual vs Predicted, Residual/Error plots, RF feature importances.
-
-Classification: Confusion Matrix, ROC & PR curves, RF feature importances.
-
-🔗 Dataset URLs (add your exact links)
-House Prices: paste source URL here
-
-Telco Customer Churn: paste source URL here
-
-📝 License
+## 📝 License
 Academic coursework; add a formal license (e.g., MIT) if you plan to reuse.
 
-🙌 Acknowledgements
-pandas • scikit-learn • imbalanced-learn • TensorFlow/Keras • matplotlib • seaborn • Jupyter
+## 🙌 Acknowledgements
+pandas, scikit-learn, imbalanced-learn, TensorFlow/Keras, matplotlib, seaborn, Jupyter
+
+
+
+
+
