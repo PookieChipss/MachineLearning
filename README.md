@@ -1,4 +1,4 @@
-# MachineLearning — Regression & Classification on Tabular Data
+# MachineLearning — Coursework on Regression & Classification
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-1.x-orange)
 ![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-yellow)
